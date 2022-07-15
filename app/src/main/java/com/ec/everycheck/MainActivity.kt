@@ -1,12 +1,18 @@
-package com.ec.ec
+package com.ec.everycheck
 
+import android.content.Intent
 import android.content.pm.PackageManager
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
-import android.webkit.WebChromeClient
 import android.webkit.WebViewClient
 import androidx.databinding.DataBindingUtil
-import com.ec.ec.databinding.ActivityMainBinding
+import androidx.lifecycle.lifecycleScope
+import com.ec.everycheck.databinding.ActivityMainBinding
+import com.google.firebase.ktx.Firebase
+import com.google.firebase.messaging.ktx.messaging
+import kotlinx.coroutines.CoroutineExceptionHandler
+import kotlinx.coroutines.launch
+import kotlinx.coroutines.tasks.await
 
 class MainActivity : AppCompatActivity() {
     private lateinit var binding: ActivityMainBinding
@@ -20,14 +26,43 @@ class MainActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         binding = DataBindingUtil.setContentView(this, R.layout.activity_main)
         instance = this
+        awaitPushToken()
         initWebView()
-        binding.webview.loadUrl(PUSH_BASE_URL)
+        val url = intent.getStringExtra("url")
+        if (url.isNullOrBlank()) {
+            binding.webview.loadUrl(PUSH_BASE_URL)
+        } else {
+            if(!url.isNullOrBlank()) {
+                binding.webview.loadUrl(url)
+            } else {
+                binding.webview.loadUrl(PUSH_BASE_URL)
+            }
+        }
+    }
+
+    override fun onNewIntent(intent: Intent?) {
+        super.onNewIntent(intent)
+        intent?.extras?.getString("url")?.let { url ->
+            if(url.isNotBlank()) {
+                binding.webview.loadUrl(url)
+            }
+        }
     }
 
     override fun onDestroy() {
         instance = null
         super.onDestroy()
     }
+
+    private fun awaitPushToken() {
+        lifecycleScope.launch(CoroutineExceptionHandler { _, throwable ->
+            throwable.printStackTrace()
+        }) {
+            val token  = Firebase.messaging.token.await()
+            AppPreferences.setPushToken(this@MainActivity, token)
+        }
+    }
+
 
     private fun initWebView() {
         with(binding.webview.settings) {

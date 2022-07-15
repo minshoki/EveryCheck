@@ -9,7 +9,7 @@
         tools:context=".MainActivity">
 
 
-        <com.ec.ec.CustomWebView
+        <com.ec.everycheck.CustomWebView
             android:id="@+id/webview"
             android:layout_width="0dp"
             android:layout_height="0dp"

@@ -1,4 +1,4 @@
-package com.ec.ec
+package com.ec.everycheck
 
 import androidx.test.platform.app.InstrumentationRegistry
 import androidx.test.ext.junit.runners.AndroidJUnit4

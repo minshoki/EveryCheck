@@ -1,4 +1,4 @@
-package com.ec.ec
+package com.ec.everycheck
 
 import android.Manifest
 import android.app.Activity
