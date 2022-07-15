@@ -4,6 +4,8 @@ import android.content.Intent
 import android.content.pm.PackageManager
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
+import android.webkit.WebResourceRequest
+import android.webkit.WebView
 import android.webkit.WebViewClient
 import androidx.databinding.DataBindingUtil
 import androidx.lifecycle.lifecycleScope
@@ -20,6 +22,8 @@ class MainActivity : AppCompatActivity() {
     companion object {
         var instance: MainActivity? = null
         const val PUSH_BASE_URL = "http://sqrt5.iptime.org:8082"
+        const val WEB_SCHEMA_FULL_GET_FCMKEY =
+            "sqrt://getFcmKey" // 자바 스크립트 콜 : javascript:fcmKey('\(PUSH_KEY)');
     }
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -77,7 +81,30 @@ class MainActivity : AppCompatActivity() {
             allowFileAccess = true
             allowContentAccess = true
         }
-        binding.webview.webViewClient = WebViewClient()
+        binding.webview.webViewClient = object: WebViewClient() {
+            override fun shouldOverrideUrlLoading(
+                view: WebView?,
+                request: WebResourceRequest?
+            ): Boolean {
+                return checkUrl(request?.url?.toString())
+            }
+
+            override fun shouldOverrideUrlLoading(view: WebView?, url: String?): Boolean {
+                return checkUrl(url)
+            }
+        }
+    }
+
+    private fun checkUrl(url: String?): Boolean {
+        return when {
+            url == WEB_SCHEMA_FULL_GET_FCMKEY -> {
+                binding.webview.loadUrl("javascript:fcmKey(\"${AppPreferences.getPushToken(this@MainActivity)}\");")
+                //push call
+                //자바 스크립트 콜 : javascript:fcmKey('\(PUSH_KEY)');
+                true
+            }
+            else -> false
+        }
     }
 
     override fun onRequestPermissionsResult(
