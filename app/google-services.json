@@ -1,0 +1,46 @@
+{
+  "project_info": {
+    "project_number": "703712146807",
+    "project_id": "everycheck-app",
+    "storage_bucket": "everycheck-app.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:703712146807:android:10365afb87d2ae159e9d72",
+        "android_client_info": {
+          "package_name": "com.ec.everycheck"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "703712146807-i304offc79dc9ufeh7j42sp56dmh6lq2.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyC4LVbHiwFUa2WMLdADriNIscE7zLW2HfE"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "703712146807-i304offc79dc9ufeh7j42sp56dmh6lq2.apps.googleusercontent.com",
+              "client_type": 3
+            },
+            {
+              "client_id": "703712146807-a98hq540fd8jagt2ligjptqghasev0cv.apps.googleusercontent.com",
+              "client_type": 2,
+              "ios_info": {
+                "bundle_id": "com.everycheck.ec"
+              }
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
